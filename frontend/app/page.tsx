@@ -1,7 +1,16 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { ethers } from "ethers";
+import {
+  connectPassport,
+  submitEcoProof,
+  stakePeerReview,
+  resolveSubmissionOnChain,
+  claimRewardOnChain
+} from "./platform";
+
+// The contract address can be set here if deployed. We default to empty string for simulated fallback.
+const DEPLOYED_CONTRACT_ADDRESS = "";
 
 /* ─── Types ─────────────────────────────────────────────────── */
 interface Submission {
@@ -209,28 +218,23 @@ export default function Home() {
 
   /* ─ Wallet helpers ─ */
   const connectWallet = async () => {
-    if (typeof window !== "undefined" && (window as any).ethereum) {
-      try {
-        const provider = new ethers.BrowserProvider((window as any).ethereum);
-        await provider.send("eth_requestAccounts", []);
-        const signer  = await provider.getSigner();
-        const address = await signer.getAddress();
-        const bal     = await provider.getBalance(address);
-        setUserAddress(address);
-        setBalance(Number(ethers.formatEther(bal)).toFixed(2));
-        setWalletConnected(true);
-        setSimMessage("Connected via Celo Provider.");
-        return;
-      } catch { /* fall through */ }
+    setSimMessage("Accessing expedition passport...");
+    const conn = await connectPassport();
+    if (conn.connected) {
+      setUserAddress(conn.address);
+      setBalance(conn.balance);
+      setWalletConnected(true);
+      setSimMessage(conn.error ? conn.error : "Connected via Celo Provider.");
+    } else if (conn.error) {
+      setSimMessage(conn.error);
     }
-    /* Demo mode */
-    const mock = "0x" + Array.from({length:40}, () => Math.floor(Math.random()*16).toString(16)).join("");
-    setUserAddress(mock);
-    setWalletConnected(true);
-    setSimMessage("Demo wallet active.");
   };
 
-  const disconnect = () => { setWalletConnected(false); setUserAddress(""); setSimMessage(""); };
+  const disconnect = () => {
+    setWalletConnected(false);
+    setUserAddress("");
+    setSimMessage("");
+  };
 
   /* ─ Submit action ─ */
   const handleSubmit = async (e: React.FormEvent) => {
@@ -241,75 +245,106 @@ export default function Home() {
     setSubmitting(true);
     setSimMessage("Uploading proof to IPFS...");
 
-    try {
-      const r = await fetch("/api/pin", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ actionType: subAction, geoHash: subGeo, photo: subPhoto }),
-      });
-      const d = await r.json();
-      if (d.success) {
-        setSimMessage(`CID: ${d.cid} — registering on Celo chain…`);
-        const weight = 100 + Math.min((streakCount > 0 ? (streakCount-1)*10 : 0), 100);
-        setTimeout(() => {
-          const newSub: Submission = {
-            id: submissions.length + 1,
-            proposer: `${userAddress.substring(0,6)}...${userAddress.slice(-4)}`,
-            actionType: subAction, proofHash: d.cid, geoHash: subGeo,
-            timestamp: new Date().toISOString().replace("T"," ").slice(0,16),
-            hoursAgo: 0, vouchStake: 0, disputeStake: 0,
-            vouchersCount: 0, disputersCount: 0, claimWeight: weight,
-            resolved: false, approved: false, claimed: false,
-            imageUrl: d.metadata?.photoUrl,
-          };
-          setSubmissions(p => [newSub, ...p]);
-          setStreakCount(p => Math.min(p+1, 7));
-          setVerifiedCount(p => p+1);
-          setPoolRemaining(p => Math.max(p-20, 0));
-          setSubmitting(false);
-          setSubmitOk(true);
-          setSimMessage("Proof submitted. Staking window now open.");
-        }, 1400);
-      }
-    } catch (err: any) {
-      setSimMessage(`Error: ${err.message}`);
+    const res = await submitEcoProof(
+      subAction,
+      subGeo,
+      subPhoto,
+      userAddress,
+      DEPLOYED_CONTRACT_ADDRESS
+    );
+
+    if (res.success) {
+      setSimMessage(res.message);
+      const weight = 100 + Math.min((streakCount > 0 ? (streakCount - 1) * 10 : 0), 100);
+      
+      // Update UI state
+      const newSub: Submission = {
+        id: submissions.length + 1,
+        proposer: `${userAddress.substring(0, 6)}...${userAddress.slice(-4)}`,
+        actionType: subAction,
+        proofHash: res.cid,
+        geoHash: subGeo,
+        timestamp: new Date().toISOString().replace("T", " ").slice(0, 16),
+        hoursAgo: 0,
+        vouchStake: 0,
+        disputeStake: 0,
+        vouchersCount: 0,
+        disputersCount: 0,
+        claimWeight: weight,
+        resolved: false,
+        approved: false,
+        claimed: false,
+        imageUrl: subPhoto || undefined,
+      };
+      
+      setSubmissions(p => [newSub, ...p]);
+      setStreakCount(p => Math.min(p + 1, 7));
+      setVerifiedCount(p => p + 1);
+      setPoolRemaining(p => Math.max(p - 20, 0));
+      setSubmitting(false);
+      setSubmitOk(true);
+    } else if (res.error) {
+      setSimMessage(res.error);
       setSubmitting(false);
     }
   };
 
   const handleVouch    = (id: number) => mutateStake(id, "vouch");
   const handleDispute  = (id: number) => mutateStake(id, "dispute");
-  const mutateStake    = (id: number, side: "vouch" | "dispute") => {
+  const mutateStake    = async (id: number, side: "vouch" | "dispute") => {
     const amt = parseFloat(stakeAmt) || 0;
     if (!walletConnected || amt <= 0) return;
-    setSubmissions(p => p.map(s => s.id !== id ? s : {
-      ...s,
-      vouchStake:    side==="vouch"   ? +(s.vouchStake   + amt).toFixed(3) : s.vouchStake,
-      disputeStake:  side==="dispute" ? +(s.disputeStake + amt).toFixed(3) : s.disputeStake,
-      vouchersCount: side==="vouch"   ? s.vouchersCount+1 : s.vouchersCount,
-      disputersCount:side==="dispute" ? s.disputersCount+1 : s.disputersCount,
-    }));
-    setBalance(p => (parseFloat(p) - amt).toFixed(2));
-    setSimMessage(`${side === "vouch" ? "Vouched" : "Disputed"} ${amt} CELO on #${id}.`);
+
+    setSimMessage(`Signing stake allocation for ${side}...`);
+    const res = await stakePeerReview(id, side, stakeAmt, DEPLOYED_CONTRACT_ADDRESS);
+
+    if (res.success) {
+      setSubmissions(p => p.map(s => s.id !== id ? s : {
+        ...s,
+        vouchStake:    side === "vouch"   ? +(s.vouchStake   + amt).toFixed(3) : s.vouchStake,
+        disputeStake:  side === "dispute" ? +(s.disputeStake + amt).toFixed(3) : s.disputeStake,
+        vouchersCount: side === "vouch"   ? s.vouchersCount + 1 : s.vouchersCount,
+        disputersCount:side === "dispute" ? s.disputersCount + 1 : s.disputersCount,
+      }));
+      setBalance(p => (parseFloat(p) - amt).toFixed(2));
+      setSimMessage(res.message);
+    } else if (res.error) {
+      setSimMessage(res.error);
+    }
   };
 
-  const handleResolve = (id: number) => {
-    setSubmissions(p => p.map(s => {
-      if (s.id !== id) return s;
-      const approved = s.vouchStake >= s.disputeStake;
-      setSimMessage(`Submission #${id} resolved. ${approved ? "APPROVED." : "REJECTED."}`);
-      if (approved) setStampKey(k => k+1);
-      return { ...s, resolved: true, approved };
-    }));
+  const handleResolve = async (id: number) => {
+    setSimMessage("Signing resolution request...");
+    const res = await resolveSubmissionOnChain(id, DEPLOYED_CONTRACT_ADDRESS);
+
+    if (res.success) {
+      setSubmissions(p => p.map(s => {
+        if (s.id !== id) return s;
+        const approved = s.vouchStake >= s.disputeStake;
+        setSimMessage(`Submission #${id} resolved. ${approved ? "APPROVED." : "REJECTED."}`);
+        if (approved) setStampKey(k => k + 1);
+        return { ...s, resolved: true, approved };
+      }));
+    } else if (res.error) {
+      setSimMessage(res.error);
+    }
   };
 
-  const handleClaim = (id: number) => {
-    setSubmissions(p => p.map(s => {
-      if (s.id !== id || s.claimed) return s;
-      const reward = +((s.claimWeight / 100) * 1.5).toFixed(2);
-      setBalance(b => (parseFloat(b) + reward).toFixed(2));
-      setSimMessage(`✓ Claimed ${reward} CELO for Submission #${id}.`);
-      return { ...s, claimed: true };
-    }));
+  const handleClaim = async (id: number) => {
+    setSimMessage("Signing reward withdrawal request...");
+    const res = await claimRewardOnChain(id, DEPLOYED_CONTRACT_ADDRESS);
+
+    if (res.success) {
+      setSubmissions(p => p.map(s => {
+        if (s.id !== id || s.claimed) return s;
+        const reward = +((s.claimWeight / 100) * 1.5).toFixed(2);
+        setBalance(b => (parseFloat(b) + reward).toFixed(2));
+        setSimMessage(res.message);
+        return { ...s, claimed: true };
+      }));
+    } else if (res.error) {
+      setSimMessage(res.error);
+    }
   };
 
   const latestSub = submissions[0];
