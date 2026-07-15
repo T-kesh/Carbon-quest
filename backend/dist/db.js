@@ -43,6 +43,23 @@ const DEFAULT_STATE = {
             approved: false,
             claimed: false,
             imageUrl: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=400&q=80",
+        },
+        {
+            id: 3,
+            proposer: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+            actionType: "Waste Sorting",
+            proofHash: "QmWaste55421",
+            geoHash: "london-camden-51.53",
+            timestamp: new Date(Date.now() - 7200000).toISOString(),
+            vouchStake: 0.40,
+            disputeStake: 0.0,
+            vouchersCount: 5,
+            disputersCount: 0,
+            claimWeight: 80,
+            resolved: false,
+            approved: false,
+            claimed: false,
+            imageUrl: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=400&q=80",
         }
     ],
     leaderboard: [
