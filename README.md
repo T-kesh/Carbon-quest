@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Carbon Quest
 
-## Getting Started
+> **Status**: in development — nothing deployed yet. This README will grow section
+> by section as each phase actually ships. Nothing below describes finished
+> functionality unless explicitly marked done.
 
-First, run the development server:
+Carbon Quest is a field-journal-styled app that turns real-world environmental
+action into a documented expedition. Plant a tree, sort waste, drop off e-waste —
+submit proof, get peer-verified, earn a share of a seasonal cUSD reward pool. Not a
+crypto dashboard: it's built to feel like an official conservation field journal,
+not a fintech app.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Built on Celo. Identity/uniqueness verification via GoodDollar's GoodID.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Why
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Most ReFi apps either feel like spreadsheets with a green theme, or don't have a
+credible sybil-resistance story for "did this person actually do this." Carbon
+Quest pairs GoodID-verified real humans with a peer stake-to-vouch/dispute
+mechanism and a shared seasonal pool — payouts are proportional to collective
+verified activity, not a flat per-action rate.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Tech stack
 
-## Learn More
+- Frontend: Next.js, MiniPay-compatible
+- Contracts: Solidity on Celo
+- Identity: GoodDollar GoodID
+- Proof storage: IPFS
+- Backend: Node/TS service (dispute window resolution, leaderboard indexing)
 
-To learn more about Next.js, take a look at the following resources:
+## Roadmap
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+See [`AGENT_TASKS.md`](./AGENT_TASKS_CARBON_QUEST.md) for the full build plan —
+architecture decisions, contract design, UI direction, and the phased task list
+from setup through post-MVP extended features.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Getting started
 
-## Deploy on Vercel
+_Not yet — setup instructions land here once Phase 0/1 are actually working
+locally._
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+_TBD._
