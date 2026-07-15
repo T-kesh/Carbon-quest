@@ -37,7 +37,7 @@ app.get("/api/submissions", (req, res) => {
     res.json({ success: true, submissions: db.submissions });
 });
 // 2. Submit / Pin Proof to IPFS with Vision Pre-check
-app.post("/api/pin", (req, res) => {
+app.post("/api/pin", async (req, res) => {
     const { actionType, geoHash, photo, proposer } = req.body;
     if (!actionType || !geoHash) {
         return res.status(400).json({ success: false, error: "Missing actionType or geoHash" });
@@ -51,14 +51,56 @@ app.post("/api/pin", (req, res) => {
             visionCheckFailed: true
         });
     }
-    // Simulate IPFS CID calculation
-    const mockCID = `QmQuestSim${Math.floor(Math.random() * 1000000000)}`;
+    let finalCID = `QmQuestSim${Math.floor(Math.random() * 1000000000)}`;
+    let isPinnedReal = false;
+    // Real IPFS Pinata Integration if credentials are set
+    const pinataKey = process.env.PINATA_API_KEY;
+    const pinataSecret = process.env.PINATA_SECRET_API_KEY;
+    if (pinataKey && pinataSecret) {
+        try {
+            console.log("[Backend] Uploading metadata to IPFS via Pinata...");
+            const pinPayload = {
+                pinataContent: {
+                    actionType,
+                    geoHash,
+                    photoUrl: photo || "",
+                    proposer: proposer || "0xAnonymous",
+                    timestamp: new Date().toISOString()
+                },
+                pinataMetadata: {
+                    name: `CarbonQuest_${actionType}_${geoHash}.json`
+                }
+            };
+            const pinResponse = await fetch("https://api.pinata.cloud/pinning/pinJSONToIPFS", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "pinata_api_key": pinataKey,
+                    "pinata_secret_api_key": pinataSecret
+                },
+                body: JSON.stringify(pinPayload)
+            });
+            if (pinResponse.ok) {
+                const pinData = await pinResponse.json();
+                finalCID = pinData.IpfsHash;
+                isPinnedReal = true;
+                console.log(`[Backend] IPFS Pin Successful: ${finalCID}`);
+            }
+            else {
+                const errText = await pinResponse.text();
+                console.error(`[Backend] Pinata failed with status ${pinResponse.status}: ${errText}`);
+            }
+        }
+        catch (pinErr) {
+            console.error("[Backend] Pinata upload error:", pinErr.message);
+        }
+    }
     const db = (0, db_1.readDB)();
     const newSub = {
         id: db.submissions.length + 1,
         proposer: proposer || "0xAnonymousProposer",
         actionType,
-        proofHash: mockCID,
+        proofHash: finalCID,
         geoHash,
         timestamp: new Date().toISOString(),
         vouchStake: 0,
@@ -75,8 +117,9 @@ app.post("/api/pin", (req, res) => {
     (0, db_1.writeDB)(db);
     res.json({
         success: true,
-        cid: mockCID,
+        cid: finalCID,
         precheckMessage: precheck.reason,
+        isPinnedReal,
         submission: newSub
     });
 });
