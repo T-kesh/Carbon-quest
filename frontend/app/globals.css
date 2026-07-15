@@ -1,0 +1,328 @@
+@import "tailwindcss";
+
+/* ─── Expedition Journal Design Tokens ──────────────────────────────── */
+@theme {
+  /* Palette */
+  --color-paper:       #F4F0E4;
+  --color-parchment:   #EFE8D5;
+  --color-card:        #EAE2CC;
+  --color-forest:      #1D3427;
+  --color-green:       #355E3B;
+  --color-gold:        #B88B4A;
+  --color-gold-light:  #D4A96A;
+  --color-rust:        #8B3A2A;
+  --color-tan:         #C4B89A;
+  --color-ink:         #1A1A14;
+  --color-ink-muted:   #4A4A38;
+
+  /* Typography */
+  --font-display:  var(--font-sora), "Sora", system-ui, sans-serif;
+  --font-body:     var(--font-sora), "Sora", system-ui, sans-serif;
+  --font-mono:     var(--font-mono), "IBM Plex Mono", "Courier New", monospace;
+}
+
+/* ─── Base ──────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #F4F0E4;
+  color: #1A1A14;
+  font-family: var(--font-display);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* ─── Paper Grain Overlay ───────────────────────────────────────────── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #EFE8D5; }
+::-webkit-scrollbar-thumb { background: #C4B89A; border-radius: 2px; }
+
+/* ─── Animations ────────────────────────────────────────────────────── */
+
+/* Rubber stamp impact */
+@keyframes stamp-impact {
+  0%   { transform: scale(2.2) rotate(-12deg); opacity: 0; filter: blur(3px); }
+  55%  { transform: scale(0.92) rotate(-8deg); opacity: 1; filter: blur(0); }
+  70%  { transform: scale(1.04) rotate(-8deg); }
+  100% { transform: scale(1) rotate(-8deg); opacity: 1; }
+}
+.animate-stamp {
+  animation: stamp-impact 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Ink writing itself onto the page */
+@keyframes ink-in {
+  from { opacity: 0; letter-spacing: 0.3em; filter: blur(1px); }
+  to   { opacity: 1; letter-spacing: inherit; filter: blur(0); }
+}
+.animate-ink-in {
+  animation: ink-in 0.6s ease-out forwards;
+}
+
+/* Slide up like paper being placed on desk */
+@keyframes paper-slide {
+  from { transform: translateY(12px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+.animate-paper-slide {
+  animation: paper-slide 0.35s ease-out forwards;
+}
+
+/* XP bar fill */
+@keyframes xp-fill {
+  from { width: 0%; }
+}
+.animate-xp-fill {
+  animation: xp-fill 1.2s ease-out 0.5s both;
+}
+
+/* Pulse on active missions */
+@keyframes field-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(53, 94, 59, 0.3); }
+  50%       { box-shadow: 0 0 0 6px rgba(53, 94, 59, 0); }
+}
+.animate-field-pulse {
+  animation: field-pulse 2.5s ease-in-out infinite;
+}
+
+/* ─── Utility classes ───────────────────────────────────────────────── */
+
+/* Paper card — the base surface for all non-sidebar cards */
+.paper-card {
+  background-color: #EFE8D5;
+  border: 1.5px solid rgba(29, 52, 39, 0.25);
+  border-radius: 3px;
+  box-shadow:
+    0 1px 3px rgba(29, 52, 39, 0.08),
+    inset 0 1px 0 rgba(255,255,255,0.35);
+}
+
+/* Inner inset card */
+.paper-inset {
+  background-color: rgba(29, 52, 39, 0.04);
+  border: 1px solid rgba(29, 52, 39, 0.12);
+  border-radius: 2px;
+}
+
+/* Section label — printed small-caps expedition label */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #355E3B;
+}
+
+/* Data number — large mono figure */
+.data-figure {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: #1D3427;
+  line-height: 1;
+}
+
+/* Expedition button — forest green, pressable */
+.btn-expedition {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: #355E3B;
+  color: #F4F0E4;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  border-radius: 2px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s, transform 0.1s, box-shadow 0.1s;
+  box-shadow: 0 2px 0 #1D3427, 0 3px 6px rgba(29,52,39,0.2);
+}
+.btn-expedition:hover {
+  background-color: #2A4C30;
+}
+.btn-expedition:active {
+  transform: translateY(2px);
+  box-shadow: 0 0 0 #1D3427, 0 1px 3px rgba(29,52,39,0.2);
+}
+
+/* Ghost button */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1.5px solid rgba(29, 52, 39, 0.35);
+  color: #1D3427;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.btn-ghost:hover {
+  background: rgba(29, 52, 39, 0.06);
+  border-color: #355E3B;
+}
+
+/* Vouch / Dispute action buttons */
+.btn-vouch {
+  flex: 1;
+  padding: 7px;
+  background: rgba(53, 94, 59, 0.08);
+  border: 1.5px solid #355E3B;
+  color: #355E3B;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-vouch:hover { background: rgba(53, 94, 59, 0.16); }
+
+.btn-dispute {
+  flex: 1;
+  padding: 7px;
+  background: rgba(139, 58, 42, 0.08);
+  border: 1.5px solid #8B3A2A;
+  color: #8B3A2A;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-dispute:hover { background: rgba(139, 58, 42, 0.16); }
+
+/* ─── Form inputs ───────────────────────────────────────────────────── */
+.field-input {
+  width: 100%;
+  background: rgba(244, 240, 228, 0.6);
+  border: 1.5px solid rgba(29, 52, 39, 0.2);
+  border-radius: 2px;
+  padding: 9px 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #1A1A14;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.field-input:focus {
+  border-color: #355E3B;
+  box-shadow: 0 0 0 3px rgba(53, 94, 59, 0.12);
+}
+.field-input::placeholder { color: #C4B89A; }
+
+.field-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #4A4A38;
+  margin-bottom: 5px;
+}
+
+/* ─── Rubber stamp ──────────────────────────────────────────────────── */
+.rubber-stamp {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border-width: 3px;
+  border-style: solid;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transform: rotate(-15deg);
+  top: 50%;
+  right: 12px;
+  translate: 0 -50%;
+  opacity: 0.88;
+  text-align: center;
+  line-height: 1.2;
+}
+.stamp-approved {
+  border-color: #355E3B;
+  color: #355E3B;
+}
+.stamp-reviewing {
+  border-color: #B88B4A;
+  color: #B88B4A;
+}
+
+/* ─── Spiral notebook binding (left edge) ───────────────────────────── */
+.notebook-binding {
+  position: relative;
+  padding-left: 22px;
+}
+.notebook-binding::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 12px;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 12px,
+    #C4B89A 12px,
+    #C4B89A 14px,
+    transparent 14px,
+    transparent 26px
+  );
+  border-right: 1px solid rgba(29,52,39,0.15);
+}
+
+/* ─── Hexagon badge ─────────────────────────────────────────────────── */
+.hex-badge {
+  width: 52px;
+  height: 60px;
+  background-color: #B88B4A;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
