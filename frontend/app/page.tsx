@@ -365,10 +365,14 @@ export default function Home() {
         {/* Logo and Explorer Title */}
         <div className="flex flex-col items-center justify-center py-6 border-b" style={{ borderColor: "rgba(244,240,228,0.08)" }}>
           <div className="flex items-center justify-center rounded-full mb-3"
-            style={{ width: 56, height: 56, background: "#355E3B", border: "2px solid #B88B4A" }}>
-            <span style={{ color: "#B88B4A", fontSize: 24 }}><Icon.compass /></span>
+            style={{
+              width: 56,
+              height: 56,
+              background: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='none' stroke='%23B88B4A' stroke-width='3' stroke-dasharray='4,4'/%3E%3Cpath d='M50,15 L75,45 L60,45 L75,70 L25,70 L40,45 L25,45 Z' fill='%23B88B4A'/%3E%3Ccircle cx='50' cy='50' r='38' fill='none' stroke='%23B88B4A' stroke-width='1.5'/%3E%3C/svg%3E\") no-repeat center",
+              backgroundSize: "contain"
+            }}>
           </div>
-          <div style={{ fontFamily: "var(--font-mono)", fontSize: 13, fontWeight: 700, color: "#F4F0E4", letterSpacing: "0.15em", textTransform: "uppercase" }}>
+          <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 700, color: "#F4F0E4", letterSpacing: "0.15em", textTransform: "uppercase" }}>
             CARBON QUEST
           </div>
           <div style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "rgba(244,240,228,0.4)", letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 2 }}>
@@ -472,7 +476,7 @@ export default function Home() {
       </div>
 
       {/* ═══ MAIN CONTENT AREA ═══════════════════════════════ */}
-      <div className="flex flex-col flex-1 overflow-hidden pl-2">
+      <div className="flex flex-col flex-1 overflow-hidden">
 
         {/* ── TOP HEADER BAR (Parchment Paper Styling) ────────────────── */}
         <header
@@ -485,7 +489,14 @@ export default function Home() {
         >
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-3">
-              <span style={{ color: "#1D3427", fontSize: 16 }}><Icon.compass /></span>
+              <div className="flex items-center justify-center rounded-full"
+                style={{
+                  width: 32,
+                  height: 32,
+                  background: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='none' stroke='%231D3427' stroke-width='4'/%3E%3Cpath d='M50,15 L75,45 L60,45 L75,70 L25,70 L40,45 L25,45 Z' fill='%231D3427'/%3E%3C/svg%3E\") no-repeat center",
+                  backgroundSize: "contain"
+                }}>
+              </div>
               <div className="flex flex-col">
                 <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, color: "#1D3427", letterSpacing: "0.1em", textTransform: "uppercase" }}>
                   CARBON QUEST
@@ -739,9 +750,18 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <button type="submit" className="btn-expedition w-full justify-center" disabled={submitting || !walletConnected}
-                      style={{ opacity: (!walletConnected || submitting) ? 0.5 : 1, cursor: !walletConnected ? "not-allowed" : "pointer" }}>
-                      {submitting ? "Signing Proof…" : "Submit Eco-Proof"}
+                    <button type="submit" className="btn-expedition w-full justify-center gap-2" disabled={submitting || !walletConnected}
+                      style={{
+                        backgroundColor: "#1D3427",
+                        borderColor: "#1D3427",
+                        opacity: (!walletConnected || submitting) ? 0.5 : 1,
+                        cursor: !walletConnected ? "not-allowed" : "pointer"
+                      }}>
+                      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path d="M11 20A7 7 0 014 13C4 6.92 8.51 3.48 12 2c0 0 5.96 2.55 7.64 7.73C21.3 15.63 18 21 11 20z"/>
+                        <path d="M4 13l8-4"/>
+                      </svg>
+                      {submitting ? "Signing Proof…" : "SUBMIT ECO-PROOF"}
                     </button>
                   </form>
                 )}
