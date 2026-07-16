@@ -351,50 +351,46 @@ export default function Home() {
 
   /* ─── Render ─────────────────────────────────────────────── */
   return (
-    <div className="flex h-screen overflow-hidden" style={{ fontFamily: "var(--font-display)", backgroundColor: "#F4F0E4" }}>
+    <div className="flex h-screen overflow-hidden relative" style={{ fontFamily: "var(--font-display)", backgroundColor: "#F4F0E4" }}>
 
       {/* ═══ LEFT SIDEBAR ════════════════════════════════════ */}
       <aside
-        className="flex-none flex flex-col"
+        className="flex-none flex flex-col relative z-10"
         style={{
-          width: 220,
+          width: 210,
           backgroundColor: "#1D3427",
-          borderRight: "1px solid rgba(255,255,255,0.06)",
           overflowY: "auto",
         }}
       >
-        {/* Logo */}
-        <div className="flex items-center gap-3 px-5 py-5 border-b" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
-          <div className="flex items-center justify-center rounded-full"
-            style={{ width: 36, height: 36, background: "#355E3B", border: "1.5px solid #B88B4A" }}>
-            <span style={{ color: "#B88B4A" }}><Icon.compass /></span>
+        {/* Logo and Explorer Title */}
+        <div className="flex flex-col items-center justify-center py-8 border-b" style={{ borderColor: "rgba(244,240,228,0.08)" }}>
+          <div className="flex items-center justify-center rounded-full mb-3"
+            style={{ width: 64, height: 64, background: "#355E3B", border: "2px solid #B88B4A" }}>
+            <span style={{ color: "#B88B4A", fontSize: 28 }}>🌲</span>
           </div>
-          <div>
-            <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, color: "#F4F0E4", letterSpacing: "0.1em", textTransform: "uppercase" }}>
-              Carbon Quest
-            </div>
-            <div style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "rgba(244,240,228,0.4)", letterSpacing: "0.08em", textTransform: "uppercase" }}>
-              Expedition Control Center
-            </div>
+          <div style={{ fontFamily: "var(--font-mono)", fontSize: 13, fontWeight: 700, color: "#F4F0E4", letterSpacing: "0.15em", textTransform: "uppercase" }}>
+            CARBON QUEST
+          </div>
+          <div style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "rgba(244,240,228,0.4)", letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 2 }}>
+            EXPEDITION LEADER
           </div>
         </div>
 
         {/* Nav Links */}
-        <nav className="flex flex-col gap-1 px-3 py-4 flex-1">
+        <nav className="flex flex-col gap-1.5 px-3 py-6 flex-1">
           {NAV_ITEMS.map(item => (
             <button
               key={item.id}
               onClick={() => setActiveNav(item.id)}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-sm text-left transition-all"
+              className="flex items-center gap-3.5 px-4 py-3 rounded-md text-left transition-all"
               style={{
                 fontFamily: "var(--font-mono)",
                 fontSize: 11,
-                fontWeight: 500,
-                letterSpacing: "0.08em",
+                fontWeight: 600,
+                letterSpacing: "0.1em",
                 textTransform: "uppercase",
-                color: activeNav === item.id ? "#F4F0E4" : "rgba(244,240,228,0.45)",
-                backgroundColor: activeNav === item.id ? "rgba(53, 94, 59, 0.55)" : "transparent",
-                borderLeft: activeNav === item.id ? "2px solid #B88B4A" : "2px solid transparent",
+                color: activeNav === item.id ? "#1D3427" : "rgba(244,240,228,0.45)",
+                backgroundColor: activeNav === item.id ? "#EFE8D5" : "transparent",
               }}
             >
               <span style={{ opacity: activeNav === item.id ? 1 : 0.5 }}>
@@ -405,160 +401,174 @@ export default function Home() {
           ))}
         </nav>
 
-        {/* Expedition Level */}
-        <div className="px-4 py-4 border-t" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
-          <div style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "rgba(244,240,228,0.4)", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 8 }}>
-            Expedition Level
+        {/* Expedition Level & Stats */}
+        <div className="px-4 py-6 border-t" style={{ borderColor: "rgba(244,240,228,0.08)" }}>
+          <div style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "rgba(244,240,228,0.4)", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 10 }}>
+            EXPEDITION LEVEL
           </div>
-          <div className="flex items-center gap-3 mb-3">
-            <div className="hex-badge flex-shrink-0" style={{ width: 44, height: 50, background: "#B88B4A" }}>
-              <span style={{ fontFamily: "var(--font-mono)", fontWeight: 800, fontSize: 16, color: "#1D3427" }}>{expeditionLevel}</span>
+          <div className="flex items-center gap-3.5 mb-4">
+            <div className="flex-shrink-0 flex items-center justify-center"
+              style={{
+                width: 48, height: 48,
+                background: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,5 95,25 95,75 50,95 5,75 5,25' fill='%23B88B4A'/%3E%3C/svg%3E\") no-repeat center",
+                backgroundSize: "contain"
+              }}>
+              <span style={{ fontFamily: "var(--font-mono)", fontWeight: 800, fontSize: 18, color: "#1D3427" }}>{expeditionLevel}</span>
             </div>
             <div>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, color: "#F4F0E4", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                Forest Guardian
+              <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, color: "#F4F0E4", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                FOREST GUARDIAN
               </div>
               <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "rgba(244,240,228,0.5)", marginTop: 2 }}>
                 {xp.toLocaleString()} / {maxXP.toLocaleString()} XP
               </div>
             </div>
           </div>
-          {/* XP bar */}
-          <div className="rounded-sm overflow-hidden" style={{ height: 4, background: "rgba(255,255,255,0.08)" }}>
+          {/* XP progress bar */}
+          <div className="rounded-full overflow-hidden" style={{ height: 6, background: "rgba(244,240,228,0.08)", border: "1px solid rgba(244,240,228,0.15)" }}>
             <div
-              className="h-full rounded-sm animate-xp-fill"
-              style={{ width: `${(xp/maxXP)*100}%`, background: "linear-gradient(90deg, #B88B4A, #D4A96A)" }}
+              className="h-full rounded-full animate-xp-fill"
+              style={{ width: `${(xp/maxXP)*100}%`, background: "#B88B4A" }}
             />
           </div>
 
-          {/* User info */}
-          <div className="flex items-center gap-2 mt-4 pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+          {/* User Profile Footer */}
+          <div className="flex items-center gap-3 mt-6 pt-4" style={{ borderTop: "1px solid rgba(244,240,228,0.08)" }}>
             <div className="flex-shrink-0 flex items-center justify-center rounded-full"
-              style={{ width: 28, height: 28, background: "#355E3B", fontSize: 12, color: "#F4F0E4", fontWeight: 700 }}>
+              style={{ width: 32, height: 32, background: "#355E3B", border: "1px solid #B88B4A", fontSize: 12, color: "#F4F0E4", fontWeight: 700 }}>
               E
             </div>
             <div>
               <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "#F4F0E4", fontWeight: 600 }}>
-                {walletConnected ? "EcoExplorer" : "Field Recruit"}
+                {walletConnected ? "EcoExplorer" : "Guest Recruit"}
               </div>
               <div style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "rgba(244,240,228,0.35)", letterSpacing: "0.05em" }}>
-                Ranger ID: {walletConnected ? `${userAddress.substring(0,6)}...${userAddress.slice(-4)}` : "— unverified —"}
+                Ranger: {walletConnected ? `${userAddress.substring(0,6)}...${userAddress.slice(-4)}` : "Unverified"}
               </div>
             </div>
           </div>
         </div>
       </aside>
 
-      {/* ═══ MAIN CONTENT AREA ═══════════════════════════════ */}
-      <div className="flex flex-col flex-1 overflow-hidden">
+      {/* ── Spiral Notebook Binding Wire Effect between Sidebar and Main Content ── */}
+      <div className="absolute top-0 bottom-0 z-20 pointer-events-none" style={{ left: 202, width: 16 }}>
+        <div className="h-full w-full" style={{
+          background: `repeating-linear-gradient(
+            to bottom,
+            transparent 0px,
+            transparent 16px,
+            #C4B89A 16px,
+            #C4B89A 22px,
+            #8B8065 22px,
+            #8B8065 24px,
+            transparent 24px,
+            transparent 40px
+          )`
+        }} />
+      </div>
 
-        {/* ── TOP HEADER BAR ───────────────────────────────── */}
+      {/* ═══ MAIN CONTENT AREA ═══════════════════════════════ */}
+      <div className="flex flex-col flex-1 overflow-hidden pl-2">
+
+        {/* ── TOP HEADER BAR (Parchment Paper Styling) ────────────────── */}
         <header
-          className="flex-none flex items-center justify-between px-6"
+          className="flex-none flex items-center justify-between px-8 border-b"
           style={{
-            height: 52,
-            backgroundColor: "#1D3427",
-            borderBottom: "1px solid rgba(255,255,255,0.06)",
+            height: 64,
+            backgroundColor: "#EFE8D5",
+            borderColor: "rgba(29, 52, 39, 0.15)",
           }}
         >
           <div className="flex items-center gap-6">
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "rgba(244,240,228,0.35)", letterSpacing: "0.18em", textTransform: "uppercase" }}>
-              Field Journal Protocol
-            </span>
-            <div style={{ width: 1, height: 18, background: "rgba(255,255,255,0.1)" }} />
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "rgba(244,240,228,0.35)", letterSpacing: "0.12em", textTransform: "uppercase" }}>
-              Session ID: CQ-87A1-222
-            </span>
+            <div className="flex flex-col">
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, color: "#1D3427", letterSpacing: "0.15em", textTransform: "uppercase" }}>
+                FIELD JOURNAL PROTOCOL
+              </span>
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "#4A4A38", marginTop: 2, letterSpacing: "0.1em" }}>
+                SESSION ID: CQ-87A1-222
+              </span>
+            </div>
 
-            {/* GoodID toggles */}
             {walletConnected && (
               <>
-                <div style={{ width: 1, height: 18, background: "rgba(255,255,255,0.1)" }} />
-                <label className="flex items-center gap-1.5 cursor-pointer" style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: isGoodID ? "#B88B4A" : "rgba(244,240,228,0.3)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
-                  <input type="checkbox" checked={isGoodID} onChange={e => setIsGoodID(e.target.checked)} className="rounded" style={{ accentColor: "#B88B4A", width: 11, height: 11 }} />
-                  GoodID
-                </label>
-                <label className="flex items-center gap-1.5 cursor-pointer" style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: isManual ? "#B88B4A" : "rgba(244,240,228,0.3)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
-                  <input type="checkbox" checked={isManual} onChange={e => setIsManual(e.target.checked)} className="rounded" style={{ accentColor: "#B88B4A", width: 11, height: 11 }} />
-                  Whitelist
+                <div style={{ width: 1, height: 24, background: "rgba(29, 52, 39, 0.15)" }} />
+                <label className="flex items-center gap-2 cursor-pointer" style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: isGoodID ? "#355E3B" : "#4A4A38", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                  <input type="checkbox" checked={isGoodID} onChange={e => setIsGoodID(e.target.checked)} className="rounded" style={{ accentColor: "#355E3B", width: 12, height: 12 }} />
+                  GoodID Whitelist
                 </label>
               </>
             )}
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             {walletConnected && (
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "#B88B4A", background: "rgba(184,139,74,0.12)", border: "1px solid rgba(184,139,74,0.3)", borderRadius: 2, padding: "3px 10px" }}>
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, color: "#355E3B", background: "rgba(53,94,59,0.06)", border: "1px solid rgba(53,94,59,0.2)", borderRadius: 4, padding: "4px 12px" }}>
                 {balance} CELO
               </span>
             )}
             {walletConnected ? (
-              <button onClick={disconnect} className="btn-ghost" style={{ color: "rgba(244,240,228,0.5)", borderColor: "rgba(255,255,255,0.12)", fontSize: 9 }}>
+              <button onClick={disconnect} className="btn-ghost" style={{ fontSize: 9, padding: "6px 14px" }}>
                 Disconnect
               </button>
             ) : (
-              <button onClick={connectWallet} className="btn-expedition" style={{ fontSize: 10, padding: "7px 16px", letterSpacing: "0.1em" }}>
-                ↑ Connect Expedition Passport
+              <button onClick={connectWallet} className="btn-expedition" style={{ fontSize: 9, padding: "8px 18px" }}>
+                † Connect Expedition Passport
               </button>
             )}
           </div>
         </header>
 
         {/* ── SCROLLABLE BODY ───────────────────────────────── */}
-        <div className="flex-1 overflow-y-auto px-6 py-5" style={{ background: "#F4F0E4" }}>
+        <div className="flex-1 overflow-y-auto px-8 py-6" style={{ background: "#F4F0E4" }}>
 
           {/* Sim message banner */}
           {simMessage && (
-            <div className="mb-4 px-4 py-2.5 rounded-sm animate-paper-slide"
-              style={{ background: "#EFE8D5", border: "1px solid rgba(29,52,39,0.2)", fontFamily: "var(--font-mono)", fontSize: 11, color: "#355E3B", borderLeft: "3px solid #355E3B" }}>
+            <div className="mb-5 px-5 py-3 rounded-lg animate-paper-slide"
+              style={{ background: "#EFE8D5", border: "1px solid rgba(29,52,39,0.2)", fontFamily: "var(--font-mono)", fontSize: 11, color: "#355E3B", borderLeft: "4px solid #355E3B" }}>
               {simMessage}
             </div>
           )}
 
-          {/* Title row */}
-          <div className="flex items-end justify-between mb-5 pb-4" style={{ borderBottom: "1.5px solid rgba(29,52,39,0.18)" }}>
+          {/* Title and Date Stamp Row */}
+          <div className="flex items-end justify-between mb-6 pb-5" style={{ borderBottom: "1px solid rgba(29,52,39,0.15)" }}>
             <div>
-              <div className="section-label mb-1">Field Journal Protocol</div>
-              <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 28, color: "#1D3427", letterSpacing: "-0.01em", lineHeight: 1.1, textTransform: "uppercase" }}>
-                Carbon Quest — Season 01
+              <div className="section-label mb-1" style={{ fontSize: 9 }}>Field Journal Protocol</div>
+              <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 32, color: "#1D3427", letterSpacing: "-0.01em", lineHeight: 1.1 }}>
+                CARBON QUEST — SEASON 01
               </h1>
             </div>
-            <div className="text-right">
-              <div style={{ fontFamily: "var(--font-mono)", fontWeight: 700, fontSize: 18, color: "#1D3427", border: "2px solid #1D3427", padding: "4px 12px", borderRadius: 2, letterSpacing: "0.05em" }}>
+            <div className="flex flex-col items-center justify-center p-3 rounded-lg"
+              style={{ border: "2px double #1D3427", background: "#EFE8D5", minWidth: 100 }}>
+              <div style={{ fontFamily: "var(--font-mono)", fontWeight: 800, fontSize: 14, color: "#1D3427", letterSpacing: "0.08em" }}>
                 DAY 14
               </div>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "#4A4A38", letterSpacing: "0.12em", marginTop: 3 }}>
+              <div style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "#4A4A38", letterSpacing: "0.1em", marginTop: 2, textTransform: "uppercase" }}>
                 JUL 10, 2026
               </div>
             </div>
           </div>
 
           {/* Three-column grid */}
-          <div className="grid gap-5" style={{ gridTemplateColumns: "minmax(0,3fr) minmax(0,4fr) minmax(0,3fr)" }}>
+          <div className="grid gap-6" style={{ gridTemplateColumns: "minmax(0,3fr) minmax(0,4fr) minmax(0,3fr)" }}>
 
             {/* ══ LEFT COLUMN: Metrics + Streak + Timeline ═════ */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-5">
 
               {/* I. Season Pool Metrics */}
-              <div className="paper-card p-5">
+              <div className="paper-card p-6">
                 <div className="section-label mb-4">I. Season Pool Metrics</div>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-5">
                   {/* Topo rings */}
-                  <div className="relative flex-shrink-0" style={{ width: 80, height: 80 }}>
-                    <svg width="80" height="80" className="transform -rotate-90">
-                      {/* Outer ring */}
-                      <circle cx="40" cy="40" r="36" stroke="#C4B89A" strokeWidth="2.5" fill="none" />
-                      <circle cx="40" cy="40" r="36" stroke="#355E3B" strokeWidth="2.5" fill="none"
-                        strokeDasharray="226" strokeDashoffset={226 - (226 * poolRemaining) / 10000} strokeLinecap="round" />
-                      {/* Middle ring */}
-                      <circle cx="40" cy="40" r="26" stroke="#C4B89A" strokeWidth="2" fill="none" />
-                      <circle cx="40" cy="40" r="26" stroke="#355E3B" strokeWidth="2" fill="none"
-                        strokeDasharray="163" strokeDashoffset={163 - (163 * poolRemaining) / 10000} strokeLinecap="round" />
-                      {/* Inner ring */}
-                      <circle cx="40" cy="40" r="16" stroke="#C4B89A" strokeWidth="2" fill="none" />
-                      <circle cx="40" cy="40" r="16" stroke="#B88B4A" strokeWidth="2" fill="none"
-                        strokeDasharray="100" strokeDashoffset={100 - (100 * poolRemaining) / 10000} strokeLinecap="round" />
+                  <div className="relative flex-shrink-0" style={{ width: 84, height: 84 }}>
+                    <svg width="84" height="84" className="transform -rotate-90">
+                      <circle cx="42" cy="42" r="38" stroke="#C4B89A" strokeWidth="2" fill="none" />
+                      <circle cx="42" cy="42" r="38" stroke="#355E3B" strokeWidth="2.5" fill="none"
+                        strokeDasharray="238" strokeDashoffset={238 - (238 * poolRemaining) / 10000} strokeLinecap="round" />
+                      <circle cx="42" cy="42" r="28" stroke="#C4B89A" strokeWidth="1.5" fill="none" />
+                      <circle cx="42" cy="42" r="28" stroke="#355E3B" strokeWidth="2" fill="none"
+                        strokeDasharray="175" strokeDashoffset={175 - (175 * poolRemaining) / 10000} strokeLinecap="round" />
+                      <circle cx="42" cy="42" r="18" stroke="#C4B89A" strokeWidth="1" fill="none" />
                     </svg>
                     <div className="absolute inset-0 flex items-center justify-center">
                       <span style={{ fontFamily: "var(--font-mono)", fontSize: 13, fontWeight: 700, color: "#355E3B" }}>
@@ -568,14 +578,14 @@ export default function Home() {
                   </div>
 
                   <div>
-                    <div className="section-label mb-1">Season Pool Remaining</div>
-                    <div style={{ fontFamily: "var(--font-mono)", fontSize: 22, fontWeight: 800, color: "#1D3427", lineHeight: 1 }}>
-                      {poolRemaining.toLocaleString()} <span style={{ fontSize: 13, fontWeight: 600 }}>cUSD</span>
+                    <div className="section-label mb-1" style={{ fontSize: 8 }}>Season Pool Remaining</div>
+                    <div style={{ fontFamily: "var(--font-mono)", fontSize: 24, fontWeight: 800, color: "#1D3427", lineHeight: 1 }}>
+                      {poolRemaining.toLocaleString()} <span style={{ fontSize: 14, fontWeight: 600 }}>cUSD</span>
                     </div>
-                    <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "#4A4A38", marginTop: 4 }}>
-                      {verifiedCount} stamps logged
+                    <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "#4A4A38", marginTop: 5 }}>
+                      {verifiedCount} stamps logged this season
                     </div>
-                    <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "#B88B4A", marginTop: 2 }}>
+                    <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "#B88B4A", marginTop: 2, fontWeight: 700 }}>
                       ◷ 16 days remaining
                     </div>
                   </div>
@@ -583,25 +593,25 @@ export default function Home() {
               </div>
 
               {/* Streak punch card */}
-              <div className="paper-card p-5">
-                <div className="section-label mb-3">{streakCount}-Day Expedition Streak</div>
+              <div className="paper-card p-6">
+                <div className="section-label mb-4">5-Day Expedition Streak</div>
                 <div className="flex gap-2">
                   {Array.from({ length: 7 }).map((_, i) => {
                     const active = i < streakCount;
                     const dayNum = 10 + i - streakCount + 1;
                     return (
-                      <div key={i} className="flex flex-col items-center gap-1" style={{ flex: 1 }}>
+                      <div key={i} className="flex flex-col items-center gap-1.5" style={{ flex: 1 }}>
                         <div
-                          className="flex items-center justify-center rounded-sm transition-all"
+                          className="flex items-center justify-center rounded-md transition-all"
                           style={{
                             width: "100%", aspectRatio: "1",
-                            border: active ? "2px solid #8B3A2A" : "1.5px dashed #C4B89A",
-                            background: active ? "rgba(139,58,42,0.08)" : "transparent",
+                            border: active ? "1.5px solid #8B3A2A" : "1px dashed #C4B89A",
+                            background: active ? "rgba(139,58,42,0.04)" : "transparent",
                             color: active ? "#8B3A2A" : "#C4B89A",
                           }}
                         >
                           {active && (
-                            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                               <polyline points="20 6 9 17 4 12"/>
                             </svg>
                           )}
@@ -616,32 +626,32 @@ export default function Home() {
               </div>
 
               {/* Field Journal Timeline */}
-              <div className="paper-card p-5" style={{ flex: 1 }}>
+              <div className="paper-card p-6" style={{ flex: 1 }}>
                 <div className="section-label mb-1">Field Journal Timeline</div>
-                <div className="section-label mb-4" style={{ color: "#4A4A38", fontSize: 9 }}>TODAY — DAY 14</div>
+                <div className="section-label mb-5" style={{ color: "#4A4A38", fontSize: 9 }}>TODAY — DAY 14</div>
 
-                <div className="notebook-binding flex flex-col gap-3.5">
+                <div className="flex flex-col gap-4">
                   {SEED_TIMELINE.map((entry, i) => (
-                    <div key={i} className="flex items-start gap-3 animate-paper-slide" style={{ animationDelay: `${i * 80}ms` }}>
-                      <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "#4A4A38", whiteSpace: "nowrap", paddingTop: 1, width: 34, flexShrink: 0 }}>
+                    <div key={i} className="flex items-start gap-4 animate-paper-slide" style={{ animationDelay: `${i * 80}ms` }}>
+                      <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "#4A4A38", whiteSpace: "nowrap", paddingTop: 2, width: 36, flexShrink: 0 }}>
                         {entry.time}
                       </span>
-                      <div className="flex items-center gap-2 flex-1">
+                      <div className="flex items-center gap-2.5 flex-1">
                         <div className="flex-shrink-0 flex items-center justify-center rounded-full"
                           style={{
-                            width: 20, height: 20,
-                            background: entry.warning ? "rgba(184,139,74,0.15)" : entry.done ? "rgba(53,94,59,0.12)" : "rgba(196,184,154,0.2)",
+                            width: 22, height: 22,
+                            background: entry.warning ? "rgba(184,139,74,0.1)" : entry.done ? "rgba(53,94,59,0.08)" : "rgba(196,184,154,0.15)",
                             border: entry.warning ? "1px solid #B88B4A" : entry.done ? "1px solid #355E3B" : "1px solid #C4B89A",
                             color: entry.warning ? "#B88B4A" : entry.done ? "#355E3B" : "#C4B89A",
                           }}>
                           {entry.done && !entry.warning && (
-                            <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                               <polyline points="20 6 9 17 4 12"/>
                             </svg>
                           )}
-                          {entry.warning && <span style={{ fontSize: 9 }}>!</span>}
+                          {entry.warning && <span style={{ fontSize: 10, fontWeight: 700 }}>!</span>}
                         </div>
-                        <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: entry.done ? "#1D3427" : "#4A4A38", fontWeight: entry.done ? 500 : 400 }}>
+                        <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: entry.done ? "#1D3427" : "#4A4A38", fontWeight: entry.done ? 500 : 400 }}>
                           {entry.label}
                         </span>
                       </div>
@@ -652,32 +662,29 @@ export default function Home() {
             </div>
 
             {/* ══ CENTRE COLUMN: Log Evidence + Reviews ════════ */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-5">
 
               {/* II. Log Eco Evidence */}
-              <div className="paper-card p-5">
+              <div className="paper-card p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="section-label">II. Log Eco Evidence</div>
-                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#355E3B" strokeWidth={1.8}>
-                    <path d="M11 20A7 7 0 014 13C4 6.92 8.51 3.48 12 2c0 0 5.96 2.55 7.64 7.73C21.3 15.63 18 21 11 20z"/>
-                    <path d="M4 13l8-4"/>
-                  </svg>
+                  <span style={{ fontSize: 16 }}>🌿</span>
                 </div>
 
                 {submitOk ? (
-                  <div className="flex flex-col items-center gap-3 py-4 animate-paper-slide">
+                  <div className="flex flex-col items-center gap-3 py-6 animate-paper-slide">
                     <div className="flex items-center justify-center rounded-full"
-                      style={{ width: 48, height: 48, background: "rgba(53,94,59,0.1)", border: "2px solid #355E3B", color: "#355E3B" }}>
-                      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      style={{ width: 52, height: 52, background: "rgba(53,94,59,0.08)", border: "1.5px solid #355E3B", color: "#355E3B" }}>
+                      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                         <polyline points="20 6 9 17 4 12"/>
                       </svg>
                     </div>
-                    <div style={{ fontFamily: "var(--font-mono)", fontWeight: 700, fontSize: 13, color: "#1D3427" }}>Action Dispatched</div>
+                    <div style={{ fontFamily: "var(--font-mono)", fontWeight: 700, fontSize: 13, color: "#1D3427" }}>Evidence Dispatched</div>
                     <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "#4A4A38", textAlign: "center" }}>
-                      Evidence CID pinned. Peer staking window is open.
+                      Proof pinned. Staking review window is active.
                     </div>
-                    <button onClick={() => setSubmitOk(false)} className="btn-ghost" style={{ marginTop: 4 }}>
-                      New Log Entry
+                    <button onClick={() => setSubmitOk(false)} className="btn-ghost" style={{ marginTop: 6 }}>
+                      New entry log
                     </button>
                   </div>
                 ) : (
@@ -720,12 +727,8 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <button type="submit" className="btn-expedition w-full" disabled={submitting || !walletConnected}
+                    <button type="submit" className="btn-expedition w-full justify-center" disabled={submitting || !walletConnected}
                       style={{ opacity: (!walletConnected || submitting) ? 0.5 : 1, cursor: !walletConnected ? "not-allowed" : "pointer" }}>
-                      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path d="M11 20A7 7 0 014 13C4 6.92 8.51 3.48 12 2c0 0 5.96 2.55 7.64 7.73C21.3 15.63 18 21 11 20z"/>
-                        <path d="M4 13l8-4"/>
-                      </svg>
                       {submitting ? "Signing Proof…" : "Submit Eco-Proof"}
                     </button>
                   </form>
@@ -733,7 +736,7 @@ export default function Home() {
               </div>
 
               {/* III. Active Peer Reviews */}
-              <div className="paper-card p-5 flex flex-col gap-4" style={{ flex: 1, minHeight: 0 }}>
+              <div className="paper-card p-6 flex flex-col gap-4" style={{ flex: 1, minHeight: 0 }}>
                 <div className="flex items-center justify-between">
                   <div className="section-label">III. Active Peer Reviews</div>
                   <select value={stakeAmt} onChange={e => setStakeAmt(e.target.value)}
@@ -744,22 +747,21 @@ export default function Home() {
                   </select>
                 </div>
 
-                <div className="flex flex-col gap-3 overflow-y-auto" style={{ maxHeight: 360 }}>
+                <div className="flex flex-col gap-4 overflow-y-auto" style={{ maxHeight: 360 }}>
                   {submissions.map(sub => (
-                    <div key={sub.id} className="paper-inset p-3 flex flex-col gap-2 relative">
-                      {/* Status badge */}
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="flex gap-2 items-start">
+                    <div key={sub.id} className="paper-inset p-4 flex flex-col gap-3 relative">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex gap-3 items-start">
                           {sub.imageUrl && (
-                            <div className="flex-shrink-0 rounded-sm overflow-hidden" style={{ width: 52, height: 52, border: "1px solid rgba(29,52,39,0.15)" }}>
+                            <div className="flex-shrink-0 rounded-md overflow-hidden" style={{ width: 56, height: 56, border: "1px solid rgba(29,52,39,0.15)" }}>
                               <img src={sub.imageUrl} alt="" className="w-full h-full object-cover" />
                             </div>
                           )}
                           <div>
-                            <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "#4A4A38", marginBottom: 2 }}>
+                            <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "#4A4A38", marginBottom: 3 }}>
                               ID: {sub.id} · Proposer: {sub.proposer}
                             </div>
-                            <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 13, color: "#1D3427" }}>
+                            <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 14, color: "#1D3427" }}>
                               {sub.actionType}
                             </div>
                             <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "#4A4A38" }}>
@@ -768,48 +770,45 @@ export default function Home() {
                           </div>
                         </div>
 
-                        {/* Rubber stamp */}
                         {sub.resolved && sub.approved && (
                           <div className="rubber-stamp stamp-approved animate-stamp" key={`stamp-${sub.id}-${stampKey}`}
-                            style={{ position: "static", width: 60, height: 60, flexShrink: 0, fontSize: 8 }}>
+                            style={{ position: "static", width: 56, height: 56, flexShrink: 0, fontSize: 8 }}>
                             APPROVED
                           </div>
                         )}
                         {!sub.resolved && (
                           <div className="rubber-stamp stamp-reviewing"
-                            style={{ position: "static", width: 60, height: 60, flexShrink: 0, fontSize: 7 }}>
+                            style={{ position: "static", width: 56, height: 56, flexShrink: 0, fontSize: 7 }}>
                             IN<br/>REVIEW
                           </div>
                         )}
                       </div>
 
-                      {/* Stakes */}
-                      <div className="grid grid-cols-2 gap-2 paper-inset p-2" style={{ borderRadius: 2 }}>
+                      <div className="grid grid-cols-2 gap-3 paper-inset p-3">
                         <div>
-                          <div style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "#4A4A38", marginBottom: 1 }}>Vouch Pool:</div>
-                          <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 700, color: "#355E3B" }}>
+                          <div style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "#4A4A38", marginBottom: 2 }}>Vouch Pool:</div>
+                          <div style={{ fontFamily: "var(--font-mono)", fontSize: 13, fontWeight: 700, color: "#355E3B" }}>
                             {sub.vouchStake} CELO <span style={{ fontSize: 10, fontWeight: 400 }}>({sub.vouchersCount})</span>
                           </div>
                         </div>
                         <div>
-                          <div style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "#4A4A38", marginBottom: 1 }}>Dispute Pool:</div>
-                          <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 700, color: "#8B3A2A" }}>
+                          <div style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "#4A4A38", marginBottom: 2 }}>Dispute Pool:</div>
+                          <div style={{ fontFamily: "var(--font-mono)", fontSize: 13, fontWeight: 700, color: "#8B3A2A" }}>
                             {sub.disputeStake} CELO <span style={{ fontSize: 10, fontWeight: 400 }}>({sub.disputersCount})</span>
                           </div>
                         </div>
                       </div>
 
-                      {/* Action buttons */}
                       {!sub.resolved ? (
                         <div className="flex gap-2">
                           <button onClick={() => handleVouch(sub.id)} className="btn-vouch" disabled={!walletConnected}>VOUCH</button>
                           <button onClick={() => handleDispute(sub.id)} className="btn-dispute" disabled={!walletConnected}>DISPUTE</button>
-                          <button onClick={() => handleResolve(sub.id)} className="btn-ghost" style={{ flexShrink: 0, padding: "7px 14px" }}>
+                          <button onClick={() => handleResolve(sub.id)} className="btn-ghost" style={{ flexShrink: 0, padding: "6px 12px" }}>
                             RESOLVE
                           </button>
                         </div>
                       ) : (
-                        <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "#4A4A38", textAlign: "center", padding: "4px 0" }}>
+                        <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "#4A4A38", textAlign: "center", padding: "2px 0" }}>
                           Staking window closed · Stakes distributed
                         </div>
                       )}
@@ -820,30 +819,28 @@ export default function Home() {
             </div>
 
             {/* ══ RIGHT COLUMN: Stamp + Leaderboard ════════════ */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-5">
 
               {/* IV. Verification Stamp */}
-              <div className="paper-card p-5">
-                <div className="section-label mb-3">IV. Verification Stamp</div>
+              <div className="paper-card p-6">
+                <div className="section-label mb-4">IV. Verification Stamp</div>
 
                 {latestSub ? (
-                  <div className="flex flex-col gap-3">
-                    <div className="p-4 rounded-sm flex flex-col gap-2 relative"
-                      style={{ background: "#1D3427", border: "1.5px solid rgba(53,94,59,0.4)", minHeight: 140, overflow: "hidden" }}>
+                  <div className="flex flex-col gap-4">
+                    <div className="p-5 rounded-lg flex flex-col gap-3 relative"
+                      style={{ background: "#1D3427", border: "1px solid rgba(53,94,59,0.3)", minHeight: 140, overflow: "hidden" }}>
                       
-                      {/* Background leaf decoration */}
-                      <div className="absolute bottom-2 right-3 opacity-10" style={{ fontSize: 48, color: "#B88B4A", transform: "rotate(-10deg)" }}>
+                      <div className="absolute bottom-2 right-3 opacity-10" style={{ fontSize: 48, transform: "rotate(-10deg)" }}>
                         🌿
                       </div>
 
-                      {/* Stamp overlay */}
                       {latestSub.resolved && latestSub.approved && (
-                        <div key={stampKey} className="absolute top-3 right-3 animate-stamp"
+                        <div key={stampKey} className="absolute top-4 right-4 animate-stamp"
                           style={{
                             fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 800, letterSpacing: "0.15em",
                             textTransform: "uppercase", color: "#8B3A2A", border: "3px solid #8B3A2A",
-                            borderRadius: 3, padding: "4px 8px", transform: "rotate(-8deg)",
-                            background: "rgba(244,240,228,0.92)", boxShadow: "inset 0 0 0 1px rgba(139,58,42,0.15)",
+                            borderRadius: 0, padding: "4px 8px", transform: "rotate(-8deg)",
+                            background: "rgba(244,240,228,0.95)",
                           }}>
                           VERIFIED
                         </div>
@@ -852,15 +849,14 @@ export default function Home() {
                       <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "rgba(244,240,228,0.45)", letterSpacing: "0.15em", textTransform: "uppercase" }}>
                         Latest Entry
                       </div>
-                      <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 16, color: "#F4F0E4", lineHeight: 1.2 }}>
+                      <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 18, color: "#F4F0E4", lineHeight: 1.2 }}>
                         {latestSub.actionType}
                       </div>
                       <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "rgba(244,240,228,0.55)" }}>
                         Location: {latestSub.geoHash}
                       </div>
 
-                      {/* Verified by */}
-                      <div className="flex items-center gap-2 mt-2 pt-2" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+                      <div className="flex items-center gap-2 mt-2 pt-2.5" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
                         <div className="flex items-center justify-center rounded-full" style={{ width: 18, height: 18, background: "#355E3B", fontSize: 8, color: "#F4F0E4", fontWeight: 700, flexShrink: 0 }}>G</div>
                         <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "rgba(244,240,228,0.5)" }}>
                           Verified by GreenGuardian
@@ -872,18 +868,17 @@ export default function Home() {
                     </div>
 
                     {latestSub.resolved && latestSub.approved && !latestSub.claimed ? (
-                      <button onClick={() => handleClaim(latestSub.id)} className="btn-expedition w-full">
-                        <Icon.reward />
+                      <button onClick={() => handleClaim(latestSub.id)} className="btn-expedition w-full justify-center">
                         Claim cUSD Reward
                       </button>
                     ) : latestSub.claimed ? (
-                      <div className="flex items-center justify-center gap-2 py-2.5 rounded-sm"
-                        style={{ background: "rgba(53,94,59,0.1)", border: "1.5px solid rgba(53,94,59,0.3)", fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, color: "#355E3B", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                      <div className="flex items-center justify-center gap-2 py-3 rounded-lg"
+                        style={{ background: "rgba(53,94,59,0.08)", border: "1px solid rgba(53,94,59,0.3)", fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, color: "#355E3B", letterSpacing: "0.1em", textTransform: "uppercase" }}>
                         <Icon.check /> Reward Claimed
                       </div>
                     ) : (
-                      <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "#4A4A38", textAlign: "center", padding: "8px 0" }}>
-                        Awaiting resolution…
+                      <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "#4A4A38", textAlign: "center", padding: "6px 0" }}>
+                        Awaiting peer resolution…
                       </div>
                     )}
                   </div>
@@ -895,7 +890,7 @@ export default function Home() {
               </div>
 
               {/* V. Ranks & Stamps */}
-              <div className="paper-card p-5 flex-1">
+              <div className="paper-card p-6 flex-1">
                 <div className="flex items-center justify-between mb-4">
                   <div className="section-label">V. Ranks &amp; Stamps</div>
                   <button className="btn-ghost" style={{ fontSize: 8, padding: "3px 8px" }}>View all →</button>
@@ -903,24 +898,23 @@ export default function Home() {
 
                 <div className="flex flex-col gap-2">
                   {leaderboard.slice(0, 5).map((entry, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 px-2.5 rounded-sm transition-all"
+                    <div key={i} className="flex items-center gap-3.5 py-2.5 px-3 rounded-lg transition-all"
                       style={{
-                        border: entry.isCurrentUser ? "1.5px solid rgba(53,94,59,0.4)" : "1px solid transparent",
-                        background: entry.isCurrentUser ? "rgba(53,94,59,0.06)" : "transparent",
+                        border: entry.isCurrentUser ? "1px solid rgba(53,94,59,0.3)" : "1px solid transparent",
+                        background: entry.isCurrentUser ? "rgba(53,94,59,0.04)" : "transparent",
                         fontWeight: entry.isCurrentUser ? 700 : 400,
                       }}>
                       <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "#4A4A38", width: 16, textAlign: "right", flexShrink: 0 }}>
                         #{entry.rank}
                       </span>
-                      {/* Rank badge */}
                       <div className="flex items-center justify-center rounded-full flex-shrink-0"
                         style={{ width: 24, height: 24, background: i === 0 ? "#B88B4A" : i === 1 ? "#C4B89A" : i === 2 ? "#B87A5A" : "rgba(29,52,39,0.08)", color: i < 3 ? "#1D3427" : "#4A4A38", fontSize: 9, fontWeight: 700 }}>
                         {i < 3 ? ["🥇","🥈","🥉"][i] : <Icon.leaf />}
                       </div>
-                      <span className="flex-1 truncate" style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "#1D3427" }}>
+                      <span className="flex-1 truncate" style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "#1D3427" }}>
                         {entry.name}
                       </span>
-                      <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, color: "#355E3B", flexShrink: 0 }}>
+                      <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, color: "#355E3B", flexShrink: 0 }}>
                         {entry.stamps} stamps
                       </span>
                     </div>
