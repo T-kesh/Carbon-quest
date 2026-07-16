@@ -107,21 +107,22 @@ body::after {
 
 /* ─── Utility classes ───────────────────────────────────────────────── */
 
-/* Paper card — the base surface for all non-sidebar cards */
+/* Paper card — Level 2 Card (Spec: 16px Radius, 1px Dark Forest border with 30% opacity) */
 .paper-card {
   background-color: #EFE8D5;
-  border: 1.5px solid rgba(29, 52, 39, 0.25);
-  border-radius: 3px;
+  border: 1px solid rgba(29, 52, 39, 0.3);
+  border-radius: 16px;
   box-shadow:
-    0 1px 3px rgba(29, 52, 39, 0.08),
-    inset 0 1px 0 rgba(255,255,255,0.35);
+    0 2px 4px rgba(29, 52, 39, 0.06),
+    inset 0 1px 0 rgba(255,255,255,0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Inner inset card */
+/* Inner inset card (Level 1 Page surface) */
 .paper-inset {
   background-color: rgba(29, 52, 39, 0.04);
-  border: 1px solid rgba(29, 52, 39, 0.12);
-  border-radius: 2px;
+  border: 1px solid rgba(29, 52, 39, 0.15);
+  border-radius: 10px;
 }
 
 /* Section label — printed small-caps expedition label */
@@ -142,7 +143,7 @@ body::after {
   line-height: 1;
 }
 
-/* Expedition button — forest green, pressable */
+/* Expedition button — primary green, pressable (Spec: 10px Radius, hover rises, active depresses) */
 .btn-expedition {
   display: inline-flex;
   align-items: center;
@@ -156,18 +157,20 @@ body::after {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   padding: 10px 20px;
-  border-radius: 2px;
-  border: none;
+  border-radius: 10px;
+  border: 1px solid rgba(29, 52, 39, 0.3);
   cursor: pointer;
-  transition: background-color 0.15s, transform 0.1s, box-shadow 0.1s;
-  box-shadow: 0 2px 0 #1D3427, 0 3px 6px rgba(29,52,39,0.2);
+  transition: background-color 0.15s, transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 2px 4px rgba(29, 52, 39, 0.15);
 }
 .btn-expedition:hover {
   background-color: #2A4C30;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(29, 52, 39, 0.2);
 }
 .btn-expedition:active {
-  transform: translateY(2px);
-  box-shadow: 0 0 0 #1D3427, 0 1px 3px rgba(29,52,39,0.2);
+  transform: translateY(1px);
+  box-shadow: 0 1px 2px rgba(29, 52, 39, 0.1);
 }
 
 /* Ghost button */
@@ -176,7 +179,7 @@ body::after {
   align-items: center;
   gap: 6px;
   background: transparent;
-  border: 1.5px solid rgba(29, 52, 39, 0.35);
+  border: 1px solid rgba(29, 52, 39, 0.3);
   color: #1D3427;
   font-family: var(--font-mono);
   font-size: 10px;
@@ -184,13 +187,17 @@ body::after {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 6px 14px;
-  border-radius: 2px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
 }
 .btn-ghost:hover {
   background: rgba(29, 52, 39, 0.06);
   border-color: #355E3B;
+  transform: translateY(-1px);
+}
+.btn-ghost:active {
+  transform: translateY(1px);
 }
 
 /* Vouch / Dispute action buttons */
@@ -198,42 +205,54 @@ body::after {
   flex: 1;
   padding: 7px;
   background: rgba(53, 94, 59, 0.08);
-  border: 1.5px solid #355E3B;
+  border: 1px solid #355E3B;
   color: #355E3B;
   font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  border-radius: 2px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.15s, transform 0.15s;
 }
-.btn-vouch:hover { background: rgba(53, 94, 59, 0.16); }
+.btn-vouch:hover { 
+  background: rgba(53, 94, 59, 0.16); 
+  transform: translateY(-1px);
+}
+.btn-vouch:active {
+  transform: translateY(1px);
+}
 
 .btn-dispute {
   flex: 1;
   padding: 7px;
   background: rgba(139, 58, 42, 0.08);
-  border: 1.5px solid #8B3A2A;
+  border: 1px solid #8B3A2A;
   color: #8B3A2A;
   font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  border-radius: 2px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.15s, transform 0.15s;
 }
-.btn-dispute:hover { background: rgba(139, 58, 42, 0.16); }
+.btn-dispute:hover { 
+  background: rgba(139, 58, 42, 0.16); 
+  transform: translateY(-1px);
+}
+.btn-dispute:active {
+  transform: translateY(1px);
+}
 
 /* ─── Form inputs ───────────────────────────────────────────────────── */
 .field-input {
   width: 100%;
   background: rgba(244, 240, 228, 0.6);
-  border: 1.5px solid rgba(29, 52, 39, 0.2);
-  border-radius: 2px;
+  border: 1px solid rgba(29, 52, 39, 0.2);
+  border-radius: 10px;
   padding: 9px 12px;
   font-family: var(--font-mono);
   font-size: 12px;
@@ -243,7 +262,7 @@ body::after {
 }
 .field-input:focus {
   border-color: #355E3B;
-  box-shadow: 0 0 0 3px rgba(53, 94, 59, 0.12);
+  box-shadow: 0 0 0 2px rgba(53, 94, 59, 0.12);
 }
 .field-input::placeholder { color: #C4B89A; }
 
