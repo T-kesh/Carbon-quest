@@ -363,31 +363,31 @@ export default function Home() {
         }}
       >
         {/* Logo and Explorer Title */}
-        <div className="flex flex-col items-center justify-center py-8 border-b" style={{ borderColor: "rgba(244,240,228,0.08)" }}>
+        <div className="flex flex-col items-center justify-center py-6 border-b" style={{ borderColor: "rgba(244,240,228,0.08)" }}>
           <div className="flex items-center justify-center rounded-full mb-3"
-            style={{ width: 64, height: 64, background: "#355E3B", border: "2px solid #B88B4A" }}>
-            <span style={{ color: "#B88B4A", fontSize: 28 }}>🌲</span>
+            style={{ width: 56, height: 56, background: "#355E3B", border: "2px solid #B88B4A" }}>
+            <span style={{ color: "#B88B4A", fontSize: 24 }}><Icon.compass /></span>
           </div>
           <div style={{ fontFamily: "var(--font-mono)", fontSize: 13, fontWeight: 700, color: "#F4F0E4", letterSpacing: "0.15em", textTransform: "uppercase" }}>
             CARBON QUEST
           </div>
           <div style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "rgba(244,240,228,0.4)", letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 2 }}>
-            EXPEDITION LEADER
+            EXPEDITION CONTROL CENTER
           </div>
         </div>
 
         {/* Nav Links */}
-        <nav className="flex flex-col gap-1.5 px-3 py-6 flex-1">
+        <nav className="flex flex-col gap-1 px-3 py-4 flex-1">
           {NAV_ITEMS.map(item => (
             <button
               key={item.id}
               onClick={() => setActiveNav(item.id)}
-              className="flex items-center gap-3.5 px-4 py-3 rounded-md text-left transition-all"
+              className="flex items-center gap-3 px-3.5 py-2.5 rounded-md text-left transition-all"
               style={{
                 fontFamily: "var(--font-mono)",
-                fontSize: 11,
+                fontSize: 10,
                 fontWeight: 600,
-                letterSpacing: "0.1em",
+                letterSpacing: "0.08em",
                 textTransform: "uppercase",
                 color: activeNav === item.id ? "#1D3427" : "rgba(244,240,228,0.45)",
                 backgroundColor: activeNav === item.id ? "#EFE8D5" : "transparent",
@@ -402,28 +402,32 @@ export default function Home() {
         </nav>
 
         {/* Expedition Level & Stats */}
-        <div className="px-4 py-6 border-t" style={{ borderColor: "rgba(244,240,228,0.08)" }}>
-          <div style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "rgba(244,240,228,0.4)", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 10 }}>
+        <div className="px-4 py-5 border-t" style={{ borderColor: "rgba(244,240,228,0.08)" }}>
+          <div style={{ fontFamily: "var(--font-mono)", fontSize: 7, color: "rgba(244,240,228,0.35)", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 6, textAlign: "center" }}>
             EXPEDITION LEVEL
           </div>
-          <div className="flex items-center gap-3.5 mb-4">
-            <div className="flex-shrink-0 flex items-center justify-center"
+          
+          <div className="flex flex-col items-center mb-3">
+            {/* Custom Shield Emblem */}
+            <div className="flex items-center justify-center mb-2"
               style={{
-                width: 48, height: 48,
-                background: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,5 95,25 95,75 50,95 5,75 5,25' fill='%23B88B4A'/%3E%3C/svg%3E\") no-repeat center",
+                width: 64, height: 64,
+                background: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50,5 C75,5 90,20 90,50 C90,80 50,95 50,95 C50,95 10,80 10,50 C10,20 25,5 50,5 Z' fill='none' stroke='%23B88B4A' stroke-width='4'/%3E%3Cpath d='M50,15 L70,30 L60,30 L75,50 L60,50 L80,75 L20,75 L40,50 L25,50 L40,30 L30,30 Z' fill='%23B88B4A'/%3E%3C/svg%3E\") no-repeat center",
                 backgroundSize: "contain"
               }}>
-              <span style={{ fontFamily: "var(--font-mono)", fontWeight: 800, fontSize: 18, color: "#1D3427" }}>{expeditionLevel}</span>
             </div>
-            <div>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, color: "#F4F0E4", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                FOREST GUARDIAN
-              </div>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "rgba(244,240,228,0.5)", marginTop: 2 }}>
-                {xp.toLocaleString()} / {maxXP.toLocaleString()} XP
-              </div>
+            
+            <div style={{ fontFamily: "var(--font-mono)", fontWeight: 800, fontSize: 24, color: "#F4F0E4", lineHeight: 1 }}>
+              {expeditionLevel}
+            </div>
+            <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700, color: "#B88B4A", textTransform: "uppercase", letterSpacing: "0.1em", marginTop: 4 }}>
+              FOREST GUARDIAN
+            </div>
+            <div style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "rgba(244,240,228,0.4)", marginTop: 2 }}>
+              {xp.toLocaleString()} / {maxXP.toLocaleString()} XP
             </div>
           </div>
+
           {/* XP progress bar */}
           <div className="rounded-full overflow-hidden" style={{ height: 6, background: "rgba(244,240,228,0.08)", border: "1px solid rgba(244,240,228,0.15)" }}>
             <div
@@ -433,17 +437,17 @@ export default function Home() {
           </div>
 
           {/* User Profile Footer */}
-          <div className="flex items-center gap-3 mt-6 pt-4" style={{ borderTop: "1px solid rgba(244,240,228,0.08)" }}>
+          <div className="flex items-center gap-3.5 mt-5 pt-4" style={{ borderTop: "1px solid rgba(244,240,228,0.08)" }}>
             <div className="flex-shrink-0 flex items-center justify-center rounded-full"
-              style={{ width: 32, height: 32, background: "#355E3B", border: "1px solid #B88B4A", fontSize: 12, color: "#F4F0E4", fontWeight: 700 }}>
+              style={{ width: 28, height: 28, background: "#355E3B", border: "1px solid #B88B4A", fontSize: 10, color: "#F4F0E4", fontWeight: 700 }}>
               E
             </div>
-            <div>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "#F4F0E4", fontWeight: 600 }}>
+            <div className="min-w-0 flex-1">
+              <div className="truncate" style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "#F4F0E4", fontWeight: 600 }}>
                 {walletConnected ? "EcoExplorer" : "Guest Recruit"}
               </div>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "rgba(244,240,228,0.35)", letterSpacing: "0.05em" }}>
-                Ranger: {walletConnected ? `${userAddress.substring(0,6)}...${userAddress.slice(-4)}` : "Unverified"}
+              <div className="truncate" style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "rgba(244,240,228,0.35)", letterSpacing: "0.05em" }}>
+                RANGER ID: {walletConnected ? `${userAddress.substring(0,6)}...${userAddress.slice(-4)}` : "Unverified"}
               </div>
             </div>
           </div>
@@ -480,39 +484,42 @@ export default function Home() {
           }}
         >
           <div className="flex items-center gap-6">
-            <div className="flex flex-col">
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, color: "#1D3427", letterSpacing: "0.15em", textTransform: "uppercase" }}>
-                FIELD JOURNAL PROTOCOL
-              </span>
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "#4A4A38", marginTop: 2, letterSpacing: "0.1em" }}>
-                SESSION ID: CQ-87A1-222
-              </span>
+            <div className="flex items-center gap-3">
+              <span style={{ color: "#1D3427", fontSize: 16 }}><Icon.compass /></span>
+              <div className="flex flex-col">
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, color: "#1D3427", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                  CARBON QUEST
+                </span>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "#4A4A38", letterSpacing: "0.05em" }}>
+                  EXPEDITION CONTROL CENTER
+                </span>
+              </div>
             </div>
 
-            {walletConnected && (
-              <>
-                <div style={{ width: 1, height: 24, background: "rgba(29, 52, 39, 0.15)" }} />
-                <label className="flex items-center gap-2 cursor-pointer" style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: isGoodID ? "#355E3B" : "#4A4A38", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>
-                  <input type="checkbox" checked={isGoodID} onChange={e => setIsGoodID(e.target.checked)} className="rounded" style={{ accentColor: "#355E3B", width: 12, height: 12 }} />
-                  GoodID Whitelist
-                </label>
-              </>
-            )}
+            <div style={{ width: 1, height: 24, background: "rgba(29, 52, 39, 0.15)" }} />
+
+            <div className="flex flex-col">
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: 8, fontWeight: 700, color: "#4A4A38", letterSpacing: "0.15em", textTransform: "uppercase" }}>
+                FIELD JOURNAL PROTOCOL
+              </span>
+              <div className="flex items-center gap-1.5" style={{ marginTop: 2 }}>
+                <span style={{ width: 12, height: 1, background: "#C4B89A" }} />
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "#355E3B", letterSpacing: "0.05em", fontWeight: 700 }}>
+                  SESSION ID: CQ-87A1-222
+                </span>
+                <span style={{ width: 12, height: 1, background: "#C4B89A" }} />
+              </div>
+            </div>
           </div>
 
           <div className="flex items-center gap-4">
-            {walletConnected && (
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, color: "#355E3B", background: "rgba(53,94,59,0.06)", border: "1px solid rgba(53,94,59,0.2)", borderRadius: 4, padding: "4px 12px" }}>
-                {balance} CELO
-              </span>
-            )}
             {walletConnected ? (
               <button onClick={disconnect} className="btn-ghost" style={{ fontSize: 9, padding: "6px 14px" }}>
                 Disconnect
               </button>
             ) : (
               <button onClick={connectWallet} className="btn-expedition" style={{ fontSize: 9, padding: "8px 18px" }}>
-                † Connect Expedition Passport
+                † CONNECT EXPEDITION PASSPORT
               </button>
             )}
           </div>
@@ -556,7 +563,7 @@ export default function Home() {
 
               {/* I. Season Pool Metrics */}
               <div className="paper-card p-6">
-                <div className="section-label mb-4">I. Season Pool Metrics</div>
+                <div className="section-label mb-4">I. SEASON POOL METRICS</div>
 
                 <div className="flex items-center gap-5">
                   {/* Topo rings */}
@@ -580,12 +587,12 @@ export default function Home() {
                   <div>
                     <div className="section-label mb-1" style={{ fontSize: 8 }}>Season Pool Remaining</div>
                     <div style={{ fontFamily: "var(--font-mono)", fontSize: 24, fontWeight: 800, color: "#1D3427", lineHeight: 1 }}>
-                      {poolRemaining.toLocaleString()} <span style={{ fontSize: 14, fontWeight: 600 }}>cUSD</span>
+                      {poolRemaining.toLocaleString()} <span style={{ fontSize: 14, fontWeight: 600 }}>CUSD</span>
                     </div>
                     <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "#4A4A38", marginTop: 5 }}>
-                      {verifiedCount} stamps logged this season
+                      {verifiedCount} stamps logged
                     </div>
-                    <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "#B88B4A", marginTop: 2, fontWeight: 700 }}>
+                    <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "#4A4A38", marginTop: 2 }}>
                       ◷ 16 days remaining
                     </div>
                   </div>
@@ -594,7 +601,7 @@ export default function Home() {
 
               {/* Streak punch card */}
               <div className="paper-card p-6">
-                <div className="section-label mb-4">5-Day Expedition Streak</div>
+                <div className="section-label mb-4">5-DAY EXPEDITION STREAK</div>
                 <div className="flex gap-2">
                   {Array.from({ length: 7 }).map((_, i) => {
                     const active = i < streakCount;
@@ -602,23 +609,28 @@ export default function Home() {
                     return (
                       <div key={i} className="flex flex-col items-center gap-1.5" style={{ flex: 1 }}>
                         <div
-                          className="flex items-center justify-center rounded-md transition-all"
+                          className="flex flex-col items-center justify-center rounded-md transition-all relative overflow-hidden"
                           style={{
                             width: "100%", aspectRatio: "1",
                             border: active ? "1.5px solid #8B3A2A" : "1px dashed #C4B89A",
                             background: active ? "rgba(139,58,42,0.04)" : "transparent",
-                            color: active ? "#8B3A2A" : "#C4B89A",
                           }}
                         >
-                          {active && (
-                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                              <polyline points="20 6 9 17 4 12"/>
-                            </svg>
+                          {active ? (
+                            <>
+                              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="#8B3A2A" strokeWidth={3} className="mt-1">
+                                <polyline points="20 6 9 17 4 12"/>
+                              </svg>
+                              <span style={{ fontFamily: "var(--font-mono)", fontSize: 6, color: "#8B3A2A", fontWeight: 700, transform: "scale(0.85)", position: "absolute", bottom: 2 }}>
+                                DAY {dayNum}
+                              </span>
+                            </>
+                          ) : (
+                            <span style={{ fontFamily: "var(--font-mono)", fontSize: 6, color: "#C4B89A", position: "absolute", bottom: 2 }}>
+                              -
+                            </span>
                           )}
                         </div>
-                        <span style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: active ? "#8B3A2A" : "#C4B89A", fontWeight: active ? 700 : 400 }}>
-                          DAY {dayNum > 0 ? dayNum : "-"}
-                        </span>
                       </div>
                     );
                   })}
@@ -627,7 +639,7 @@ export default function Home() {
 
               {/* Field Journal Timeline */}
               <div className="paper-card p-6" style={{ flex: 1 }}>
-                <div className="section-label mb-1">Field Journal Timeline</div>
+                <div className="section-label mb-1">FIELD JOURNAL TIMELINE</div>
                 <div className="section-label mb-5" style={{ color: "#4A4A38", fontSize: 9 }}>TODAY — DAY 14</div>
 
                 <div className="flex flex-col gap-4">
@@ -772,13 +784,13 @@ export default function Home() {
 
                         {sub.resolved && sub.approved && (
                           <div className="rubber-stamp stamp-approved animate-stamp" key={`stamp-${sub.id}-${stampKey}`}
-                            style={{ position: "static", width: 56, height: 56, flexShrink: 0, fontSize: 8 }}>
+                            style={{ position: "static", width: 68, height: 68, flexShrink: 0, fontSize: 8, transform: "rotate(-12deg)", mixBlendMode: "multiply", border: "3px double #355E3B" }}>
                             APPROVED
                           </div>
                         )}
                         {!sub.resolved && (
                           <div className="rubber-stamp stamp-reviewing"
-                            style={{ position: "static", width: 56, height: 56, flexShrink: 0, fontSize: 7 }}>
+                            style={{ position: "static", width: 68, height: 68, flexShrink: 0, fontSize: 7, transform: "rotate(-6deg)", mixBlendMode: "multiply" }}>
                             IN<br/>REVIEW
                           </div>
                         )}
