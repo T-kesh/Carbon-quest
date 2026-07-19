@@ -16,6 +16,12 @@ async function main() {
   await pool.waitForDeployment();
   const address = await pool.getAddress();
 
+  if (hre.network.name === "localhost" || hre.network.name === "hardhat") {
+    console.log("Local network detected. Disabling GoodID on-chain whitelist checks...");
+    const tx = await pool.setUseGoodID(false);
+    await tx.wait();
+  }
+
   console.log("CarbonQuestPool contract successfully deployed to:", address);
 }
 
