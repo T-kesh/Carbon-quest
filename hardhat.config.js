@@ -40,6 +40,14 @@ export default {
     alfajores: {
       url: "https://rpc.ankr.com/celo_alfajores",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
+    },
+    celoSepolia: {
+      url: "https://forno.sepolia.celo.org",
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
+    },
+    celoMainnet: {
+      url: "https://forno.celo.org",
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
     }
   }
 };
