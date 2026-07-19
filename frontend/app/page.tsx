@@ -168,6 +168,54 @@ const NAV_ITEMS = [
   { id: "settings",  label: "Settings",  icon: Icon.settings },
 ];
 
+function compressImage(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target?.result as string;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          resolve(event.target?.result as string);
+          return;
+        }
+
+        const MAX_SIZE = 1000;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > MAX_SIZE) {
+            height *= MAX_SIZE / width;
+            width = MAX_SIZE;
+          }
+        } else {
+          if (height > MAX_SIZE) {
+            width *= MAX_SIZE / height;
+            height = MAX_SIZE;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const compressedBase64 = canvas.toDataURL("image/jpeg", 0.7);
+        resolve(compressedBase64);
+      };
+      img.onerror = () => {
+        reject(new Error("Failed to load image for compression."));
+      };
+    };
+    reader.onerror = () => {
+      reject(new Error("Failed to read file."));
+    };
+  });
+}
+
 /* ═══════════════════════════════════════════════════════════════
    ROOT COMPONENT
 ═══════════════════════════════════════════════════════════════ */
@@ -182,6 +230,7 @@ export default function Home() {
   /* UI */
   const [activeNav, setActiveNav]       = useState("dashboard");
   const [simMessage, setSimMessage]     = useState("");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   /* Game state */
   const [streakCount, setStreakCount]             = useState(5);
@@ -352,10 +401,17 @@ export default function Home() {
   /* ─── Render ─────────────────────────────────────────────── */
   return (
     <div className="flex h-screen overflow-hidden relative" style={{ fontFamily: "var(--font-display)", backgroundColor: "#F4F0E4" }}>
+      {/* Mobile Sidebar backdrop */}
+      {isMobileMenuOpen && (
+        <div
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="fixed inset-0 bg-ink/40 z-40 md:hidden cursor-pointer"
+        />
+      )}
 
       {/* ═══ LEFT SIDEBAR ════════════════════════════════════ */}
       <aside
-        className="flex-none flex flex-col relative z-10"
+        className={`flex-none flex flex-col expedition-sidebar z-45 ${isMobileMenuOpen ? "mobile-sidebar-open" : ""}`}
         style={{
           width: 210,
           backgroundColor: "#1D3427",
@@ -385,8 +441,11 @@ export default function Home() {
           {NAV_ITEMS.map(item => (
             <button
               key={item.id}
-              onClick={() => setActiveNav(item.id)}
-              className="flex items-center gap-3 px-3.5 py-2.5 rounded-md text-left transition-all"
+              onClick={() => {
+                setActiveNav(item.id);
+                setIsMobileMenuOpen(false);
+              }}
+              className="flex items-center gap-3 px-3.5 py-2.5 rounded-md text-left transition-all cursor-pointer"
               style={{
                 fontFamily: "var(--font-mono)",
                 fontSize: 10,
@@ -459,7 +518,7 @@ export default function Home() {
       </aside>
 
       {/* ── Spiral Notebook Binding Wire Effect between Sidebar and Main Content ── */}
-      <div className="absolute top-0 bottom-0 z-20 pointer-events-none" style={{ left: 202, width: 16 }}>
+      <div className="absolute top-0 bottom-0 z-20 pointer-events-none notebook-wire" style={{ left: 202, width: 16 }}>
         <div className="h-full w-full" style={{
           background: `repeating-linear-gradient(
             to bottom,
@@ -488,6 +547,17 @@ export default function Home() {
           }}
         >
           <div className="flex items-center gap-6">
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="md:hidden flex items-center justify-center p-2 rounded-md hover:bg-card text-forest cursor-pointer"
+              style={{ border: "1px solid rgba(29,52,39,0.15)" }}
+            >
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+            </button>
             <div className="flex items-center gap-3">
               <div className="flex items-center justify-center rounded-full"
                 style={{
@@ -567,7 +637,7 @@ export default function Home() {
           </div>
 
           {/* Three-column grid */}
-          <div className="grid gap-6" style={{ gridTemplateColumns: "minmax(0,3fr) minmax(0,4fr) minmax(0,3fr)" }}>
+          <div className="dashboard-grid">
 
             {/* ══ LEFT COLUMN: Metrics + Streak + Timeline ═════ */}
             <div className="flex flex-col gap-5">
@@ -740,13 +810,54 @@ export default function Home() {
                     </div>
 
                     <div>
-                      <label className="field-label">Evidence Image URL</label>
+                      <label className="field-label">Evidence Image (Camera/Upload)</label>
                       <div className="relative">
-                        <input type="text" value={subPhoto} onChange={e => setSubPhoto(e.target.value)}
-                          placeholder="Paste image URL or upload proof" className="field-input pr-8" />
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "#C4B89A" }}>
-                          <Icon.camera />
-                        </div>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              setSimMessage("Compressing proof image...");
+                              try {
+                                const base64 = await compressImage(file);
+                                setSubPhoto(base64);
+                                setSimMessage("Image compressed successfully (<250KB).");
+                              } catch (err: any) {
+                                setSimMessage(`Compression failed: ${err.message}`);
+                              }
+                            }
+                          }}
+                          className="hidden"
+                          id="proof-image-file"
+                        />
+                        {subPhoto ? (
+                          <div className="flex flex-col gap-2 p-3 rounded-lg border border-dashed border-forest bg-parchment">
+                            <div className="relative rounded-md overflow-hidden animate-paper-slide" style={{ height: 120 }}>
+                              <img src={subPhoto} alt="Proof preview" className="w-full h-full object-cover" />
+                              <button
+                                type="button"
+                                onClick={() => setSubPhoto("")}
+                                className="absolute top-2 right-2 rounded-full p-1 bg-rust text-paper text-xs font-bold shadow-md hover:bg-forest transition-colors flex items-center justify-center cursor-pointer"
+                                style={{ width: 22, height: 22 }}
+                              >
+                                &times;
+                              </button>
+                            </div>
+                            <span className="text-[10px] text-ink-muted text-center font-mono">
+                              Compressed Base64 JPEG ready for IPFS dispatch
+                            </span>
+                          </div>
+                        ) : (
+                          <label
+                            htmlFor="proof-image-file"
+                            className="flex flex-col items-center justify-center p-6 rounded-lg border border-dashed border-tan bg-parchment hover:border-forest cursor-pointer transition-all"
+                          >
+                            <span className="text-xl mb-1">📸</span>
+                            <span className="text-xs font-mono text-ink font-bold">CAPTURE / CHOOSE IMAGE</span>
+                            <span className="text-[9px] font-mono text-ink-muted mt-1">Automatic client-side compression enabled</span>
+                          </label>
+                        )}
                       </div>
                     </div>
 
