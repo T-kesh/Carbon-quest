@@ -8,12 +8,15 @@ import {
   resolveSubmissionOnChain,
   claimRewardOnChain
 } from "./platform";
+import PassportView from "./components/PassportView";
+import MissionsView from "./components/MissionsView";
+import RewardsView from "./components/RewardsView";
 
 // The contract address can be set here if deployed. We default to empty string for simulated fallback.
 const DEPLOYED_CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
 /* ─── Types ─────────────────────────────────────────────────── */
-interface Submission {
+export interface Submission {
   id: number;
   proposer: string;
   actionType: string;
@@ -636,8 +639,8 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Three-column grid */}
-          <div className="dashboard-grid">
+          {activeNav === "dashboard" && (
+            <div className="dashboard-grid">
 
             {/* ══ LEFT COLUMN: Metrics + Streak + Timeline ═════ */}
             <div className="flex flex-col gap-5">
@@ -1066,7 +1069,36 @@ export default function Home() {
               </div>
             </div>
 
-          </div>{/* /three-col grid */}
+            </div>
+          )}
+
+          {activeNav === "passport" && (
+            <PassportView
+              walletConnected={walletConnected}
+              userAddress={userAddress}
+              streakCount={streakCount}
+              expeditionLevel={expeditionLevel}
+              balance={balance}
+              submissions={submissions}
+              setActiveNav={setActiveNav}
+            />
+          )}
+
+          {activeNav === "missions" && (
+            <MissionsView
+              submissions={submissions}
+              setSimMessage={setSimMessage}
+            />
+          )}
+
+          {activeNav === "rewards" && (
+            <RewardsView
+              walletConnected={walletConnected}
+              userAddress={userAddress}
+              expeditionLevel={expeditionLevel}
+              setSimMessage={setSimMessage}
+            />
+          )}
         </div>{/* /scrollable body */}
       </div>{/* /main content */}
     </div>/* /root */
