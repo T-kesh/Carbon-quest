@@ -400,6 +400,19 @@ export default function Home() {
   };
 
   const latestSub = submissions[0];
+  const approvedTreePlantings = submissions.filter(s => s.resolved && s.approved && s.actionType === "Tree Planting").length;
+  const approvedEWaste = submissions.filter(s => s.resolved && s.approved && s.actionType === "E-waste Drop-off").length;
+  const approvedWasteSorting = submissions.filter(s => s.resolved && s.approved && s.actionType === "Waste Sorting").length;
+
+  const co2Offset = approvedTreePlantings * 12;
+  const ewasteReclaimed = approvedEWaste * 5;
+  const wasteDiverted = approvedWasteSorting * 8;
+
+  const actionDetails: Record<string, { difficulty: string; xp: number; impact: string; icon: string }> = {
+    "Tree Planting": { difficulty: "High", xp: 120, impact: "Prevents 12kg CO2/year", icon: "🌳" },
+    "E-waste Drop-off": { difficulty: "Medium", xp: 100, impact: "Reclaims 5kg copper/lead", icon: "🔌" },
+    "Waste Sorting": { difficulty: "Low", xp: 80, impact: "Diverts 8kg waste from landfill", icon: "🗑️" }
+  };
 
   /* ─── Render ─────────────────────────────────────────────── */
   return (
@@ -645,6 +658,36 @@ export default function Home() {
             {/* ══ LEFT COLUMN: Metrics + Streak + Timeline ═════ */}
             <div className="flex flex-col gap-5">
 
+                {/* Daily Expedition Briefing */}
+                <div className="paper-card p-6" style={{ borderLeft: "4px solid #B88B4A" }}>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="section-label" style={{ color: "#B88B4A" }}>TACTICAL BRIEFING DISPATCH</div>
+                    <span className="text-[10px] font-mono text-ink-muted">CQ-DAY-14-DISPATCH</span>
+                  </div>
+                  <div className="font-mono text-xs text-ink leading-relaxed bg-parchment p-3 rounded border border-tan">
+                    <div className="font-bold mb-1">🌿 METEOROLOGICAL DISPATCH:</div>
+                    Sector dry. Winds 12kts. Ideal reforestation conditions.
+                    <div className="font-bold mt-2.5 mb-1">🎯 STRATEGIC DIRECTIVE:</div>
+                    High-density satellite activity detected. Prioritize <span className="font-bold text-forest">Tree Planting</span> logs for maximum seasonal weight.
+                  </div>
+                </div>
+
+                {/* Community Restoration Progress */}
+                <div className="paper-card p-6">
+                  <div className="flex justify-between items-center mb-3">
+                    <div className="section-label">COMMUNITY RESTORATION GOAL</div>
+                    <span className="text-xs font-mono font-bold text-forest">
+                      {3120 + submissions.filter(s => s.resolved && s.approved).length * 10} / 5000 kg CO2
+                    </span>
+                  </div>
+                  <div className="w-full bg-parchment rounded overflow-hidden p-1 border border-tan">
+                    <div className="h-2 rounded bg-forest transition-all duration-500" style={{ width: `${((3120 + submissions.filter(s => s.resolved && s.approved).length * 10) / 5000) * 100}%` }} />
+                  </div>
+                  <div className="text-[8px] font-mono text-ink-muted mt-2 text-center uppercase tracking-wide">
+                    Seasonal offset objective: 5,000 kg CO2 absorption target
+                  </div>
+                </div>
+
               {/* I. Season Pool Metrics */}
               <div className="paper-card p-6">
                 <div className="section-label mb-4">I. SEASON POOL METRICS</div>
@@ -799,6 +842,22 @@ export default function Home() {
                           </svg>
                         </div>
                       </div>
+                      {actionDetails[subAction] && (
+                        <div className="mt-2.5 p-3 rounded bg-parchment border border-tan flex flex-col gap-1.5 font-mono text-[10px]">
+                          <div className="flex justify-between">
+                            <span className="text-ink-muted">Estimated Difficulty:</span>
+                            <span className="font-bold text-ink">{actionDetails[subAction].difficulty}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-ink-muted">Tactical Reward:</span>
+                            <span className="font-bold text-forest">{actionDetails[subAction].xp} XP</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-ink-muted">Environmental Impact:</span>
+                            <span className="font-bold text-gold">{actionDetails[subAction].impact}</span>
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     <div>
@@ -960,12 +1019,34 @@ export default function Home() {
                       )}
                     </div>
                   ))}
-                </div>
               </div>
+            </div>
             </div>
 
             {/* ══ RIGHT COLUMN: Stamp + Leaderboard ════════════ */}
             <div className="flex flex-col gap-5">
+
+              {/* Personal Environmental Impact Statistics */}
+              <div className="paper-card p-6">
+                <div className="section-label mb-4">PERSONAL ENVIRONMENTAL IMPACT STATS</div>
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="paper-inset p-3 flex flex-col items-center justify-center text-center">
+                    <span className="text-xl mb-1">🌳</span>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 13, fontWeight: 700, color: "#355E3B" }}>{co2Offset} kg</span>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 7, color: "#4A4A38", marginTop: 2, textTransform: "uppercase" }}>CO2 Offset</span>
+                  </div>
+                  <div className="paper-inset p-3 flex flex-col items-center justify-center text-center">
+                    <span className="text-xl mb-1">🔌</span>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 13, fontWeight: 700, color: "#B88B4A" }}>{ewasteReclaimed} kg</span>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 7, color: "#4A4A38", marginTop: 2, textTransform: "uppercase" }}>E-Waste Reclaimed</span>
+                  </div>
+                  <div className="paper-inset p-3 flex flex-col items-center justify-center text-center">
+                    <span className="text-xl mb-1">🗑️</span>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 13, fontWeight: 700, color: "#1D3427" }}>{wasteDiverted} kg</span>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 7, color: "#4A4A38", marginTop: 2, textTransform: "uppercase" }}>Waste Diverted</span>
+                  </div>
+                </div>
+              </div>
 
               {/* IV. Verification Stamp */}
               <div className="paper-card p-6">
