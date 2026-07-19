@@ -13,7 +13,7 @@ import MissionsView from "./components/MissionsView";
 import RewardsView from "./components/RewardsView";
 
 // The contract address can be set here if deployed. We default to empty string for simulated fallback.
-const DEPLOYED_CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+const DEPLOYED_CONTRACT_ADDRESS = "0xd5F67a37c8388BD9bCcaFE3aDa692CF2f8C48904";
 
 /* ─── Types ─────────────────────────────────────────────────── */
 export interface Submission {
