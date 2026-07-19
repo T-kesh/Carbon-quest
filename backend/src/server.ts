@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import rateLimit from "express-rate-limit";
 import { readDB, writeDB } from "./db";
 import { startResolutionWorker } from "./cron/resolver";
 
@@ -11,6 +12,17 @@ const PORT = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(express.json());
+
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // Limit each IP to 10 requests per windowMs
+  message: {
+    success: false,
+    error: "Too many submission attempts from this explorer ID. Please try again after 15 minutes."
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 // Vision Pre-check helper
 function visionPrecheck(photoUrl: string, actionType: string): { passed: boolean; reason: string } {
@@ -43,7 +55,7 @@ app.get("/api/submissions", (req, res) => {
 });
 
 // 2. Submit / Pin Proof to IPFS with Vision Pre-check
-app.post("/api/pin", async (req, res) => {
+app.post("/api/pin", apiLimiter, async (req, res) => {
   const { actionType, geoHash, photo, proposer } = req.body;
 
   if (!actionType || !geoHash) {
@@ -139,7 +151,7 @@ app.post("/api/pin", async (req, res) => {
 });
 
 // 3. Staking (Vouch / Dispute) Index update
-app.post("/api/review", (req, res) => {
+app.post("/api/review", apiLimiter, (req, res) => {
   const { id, type, amount } = req.body; // type: 'vouch' | 'dispute'
   const db = readDB();
   const subIdx = db.submissions.findIndex(s => s.id === Number(id));
